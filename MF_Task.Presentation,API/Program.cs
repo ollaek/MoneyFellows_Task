@@ -1,12 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using MF_Task.Infrastructure.Data;
 using System.Reflection;
+using MF_Task.Core.Interfaces;
+using MF_Task.Infrastructure.Data.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddRepositories(Assembly.GetExecutingAssembly());
 builder.Services.AddMediatRHandlers(Assembly.GetExecutingAssembly());

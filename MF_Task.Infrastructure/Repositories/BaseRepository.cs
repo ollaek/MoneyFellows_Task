@@ -1,8 +1,7 @@
-﻿using MF_Task.Infrastructure.Data;
-using MF_Task.Core.Interfaces;
+﻿using MF_Task.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MF_Task.Infrastructure.Repositories
+namespace MF_Task.Infrastructure.Data.UnitOfWork
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
@@ -26,23 +25,22 @@ namespace MF_Task.Infrastructure.Repositories
         public async Task AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
-            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await _context.Set<T>().FindAsync(id);
             if (entity != null)
             {
                 _context.Set<T>().Remove(entity);
-                await _context.SaveChangesAsync();
             }
         }
+
     }
+
 }
