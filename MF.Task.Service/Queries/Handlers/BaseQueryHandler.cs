@@ -1,14 +1,12 @@
 ﻿using MediatR;
+using MF_Task.Service.DTOs;
 
 namespace MF_Task.Service.Queries.Handlers
 {
-    public abstract class BaseQueryHandler<TQuery, TResponse> : IRequestHandler<TQuery, TResponse>
-         where TQuery : IRequest<TResponse>
+    public abstract class BaseQueryHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
     {
-        public virtual async Task<TResponse> Handle(TQuery query, CancellationToken cancellationToken)
-        {
-            return await ExecuteQueryAsync(query, cancellationToken);
-        }
-        protected abstract Task<TResponse> ExecuteQueryAsync(TQuery query, CancellationToken cancellationToken);
+        public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
+
     }
 }
