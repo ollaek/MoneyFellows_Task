@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace MF_Task.Presentation_API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

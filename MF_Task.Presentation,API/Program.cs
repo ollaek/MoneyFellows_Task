@@ -4,6 +4,8 @@ using System.Reflection;
 using MF_Task.Core.Interfaces;
 using MF_Task.Infrastructure.Data.UnitOfWork;
 using Serilog;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,16 @@ builder.Services.AddMediatRHandlers(Assembly.GetExecutingAssembly());
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+
+    options.ReportApiVersions = true;
+
+    options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+});
 
 var app = builder.Build();
 
