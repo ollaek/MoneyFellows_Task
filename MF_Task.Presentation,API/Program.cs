@@ -10,10 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MF_Task.Service;
-using MF_Task.Service.Queries.Handlers;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using MF_Task.Service.Commands.Handlers;
 using MF_Task.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using MF_Task.Infrastructure.Data.Seed;
@@ -109,6 +105,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
