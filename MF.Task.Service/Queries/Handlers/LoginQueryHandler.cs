@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using MF_Task.Service.DTOs;
 using MF_Task.Infrastructure.Data;
+using System.Data;
 
 namespace MF_Task.Service.Queries.Handlers
 {
@@ -34,7 +35,7 @@ namespace MF_Task.Service.Queries.Handlers
         if (result.Succeeded)
         {
             // Generate JWT Token
-            var token = GenerateJwtToken(user);
+            var token = await GenerateJwtToken(user);
 
             return CreateSuccessResponse("Login successful", token);
         }
@@ -42,13 +43,15 @@ namespace MF_Task.Service.Queries.Handlers
         return CreateFailureResponse("Invalid username or password.");
     }
 
-    private string GenerateJwtToken(ApplicationUser user)
+    private async Task<string> GenerateJwtToken(ApplicationUser user)
     {
+        var userRoles = await _userManager.GetRolesAsync(user);
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Name, user.UserName)
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Role, userRoles[0])
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));

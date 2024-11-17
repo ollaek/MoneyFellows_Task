@@ -1,8 +1,14 @@
 ﻿using MF_Task.Service.DTOs;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MF_Task.Service.Commands
 {
+    public enum UserRole
+    {
+        User,
+        Admin
+    }
     public class RegisterUserCommand : BaseCommand<BaseResponseDTO<object>>
     {
         [Required]
@@ -29,5 +35,7 @@ namespace MF_Task.Service.Commands
         [Required]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters.")]
         public string Password { get; set; }
+        [JsonIgnore] 
+        public UserRole Role { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace MF_Task.Service.Commands.Handlers
             if (result.Succeeded)
             {
                 // Optionally assign roles or additional logic
-                await _userManager.AddToRoleAsync(user, "User");
+                await _userManager.AddToRoleAsync(user, request.Role.ToString());
 
                 return CreateSuccessResponse("User registered successfully.");
             }
